@@ -53,7 +53,10 @@ const ConversationPage: FC = () => {
   
           try {
             await axios.post(`${API_URL}/messages/${id}`, botMessage);
-            const localEmail = localStorage.getItem("email") 
+            let localEmail: string | null = null;
+            if (typeof window !== "undefined") {
+              localEmail = localStorage.getItem("email");
+            }
             const response = await axios.get<Conversation[]>(`${API_URL}/conversations/${localEmail}`);
             setConversations(response.data);
 

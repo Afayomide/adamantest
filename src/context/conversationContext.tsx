@@ -17,7 +17,10 @@ const ConversationContext = createContext<ConversationContextType | undefined>(u
 export const ConversationProvider = ({ children }: { children: React.ReactNode }) => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState<boolean>(true)
-  const localEmail = localStorage.getItem("email") 
+  let localEmail: string | null = null;
+  if (typeof window !== "undefined") {
+    localEmail = localStorage.getItem("email");
+  }
 
   useEffect(() => {
     if (!localEmail) return;

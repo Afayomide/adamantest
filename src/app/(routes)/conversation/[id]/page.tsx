@@ -6,7 +6,7 @@ import MessageList from '../../../../components/messageList';
 import MessageInput from '../../../../components/messageInput';
 import { Button } from '@mui/material';
 import { API_URL } from '../../(home)/page';
-import { Conversation, Message, LocalMessage } from '@/components/types';
+import { Conversation, Message } from '@/components/types';
 import { useConversations } from '@/context/conversationContext';
 
 const ConversationPage: FC = () => {

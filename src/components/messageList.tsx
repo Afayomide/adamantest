@@ -13,7 +13,7 @@ interface MessageListProps {
 
 const MessageList: FC<MessageListProps> = ({ messages }) => {
   return (
-    <div className="p-4 space-y-2">
+    <div className="p-4 space-y-2 mb-20">
       {messages.map((message, index) => (
         <div
           key={index}
@@ -21,8 +21,8 @@ const MessageList: FC<MessageListProps> = ({ messages }) => {
         >
           <Paper
             elevation={3}
-            className={`p-3 rounded-lg max-w-xs ${
-              message.isUser ? "bg-blue-500 text-white" : "bg-gray-200 text-black"
+            className={`p-3 !rounded-lg max-w-xs ${
+              message.isUser ? "!bg-blue-500 !text-white" : "!bg-gray-200 !text-black"
             }`}
           >
             {message.text}

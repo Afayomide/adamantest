@@ -6,21 +6,25 @@ import MessageList from '../../../../components/messageList';
 import MessageInput from '../../../../components/messageInput';
 import { Button } from '@mui/material';
 import { API_URL } from '../../(home)/page';
+import { Conversation } from '@/components/types';
+import { useConversations } from '@/context/conversationContext';
 
 const ConversationPage: FC = () => {
   const router = useRouter();
   const { id } = useParams();
   const [messages, setMessages] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false)
+  const {setConversations} = useConversations()
 
   useEffect(() => {
     if (id) {
       axios
         .get(`${API_URL}/messages/${id}`)
-        .then((response:any) => {
+        .then((response: any) => {
           setMessages(response.data);
           setLoading(false);
-          console.log(response.data)
+          console.log(response.data);
         })
         .catch((error) => {
           console.error(error);
@@ -29,23 +33,43 @@ const ConversationPage: FC = () => {
     }
   }, [id]);
 
-  const handleSendMessage = (text: string) => {
+  const handleSendMessage = async (text: string) => {
     if (id) {
-      axios
-        .post(`${API_URL}/messages/${id}`, { text, isUser: true })
-        .then((response) => {
+      setSending(true)
+      try {
+        const response = await axios.post(`${API_URL}/messages/${id}`, { text, isUser: true });
+        
+        setMessages((prev) => [...prev, response.data]);
+  
+        setTimeout(async () => {
           const botMessage = {
-            text: "This is a chatbot.",
+            text: "This is an AI generated response",
             isUser: false,
             createdAt: new Date().toISOString(),
-          };         
-           setMessages((prev) => [...prev, response.data]);
+          };
+  
+          setMessages((prev) => [...prev, botMessage]);
+  
+          try {
+            await axios.post(`${API_URL}/messages/${id}`, botMessage);
+            const localEmail = localStorage.getItem("email") 
+            const response = await axios.get<Conversation[]>(`${API_URL}/conversations/${localEmail}`);
+            setConversations(response.data);
 
-          return axios.post(`${API_URL}/messages/${id}`, botMessage);
-        })
-        .catch((error) => console.error(error));
+
+          } catch (error) {
+            console.error("Error sending bot message:", error);
+          }
+          finally{
+            setSending(false)
+          }
+        }, 2000); 
+      } catch (error) {
+        console.error("Error sending user message:", error);
+      } 
     }
   };
+  
 
   const handleDeleteConversation = () => {
     if (id) {
@@ -59,7 +83,7 @@ const ConversationPage: FC = () => {
   return (
     <div className="flex flex-col h-screen">
       <div className="flex justify-between items-center p-4 bg-gray-800 text-white">
-        <h1 className="text-xl">Conversation {id}</h1>
+        <h1 className="text-xl">Chatbot Conversation</h1>
         <Button variant="contained" color="error" onClick={handleDeleteConversation}>
           Delete Conversation
         </Button>
@@ -73,7 +97,7 @@ const ConversationPage: FC = () => {
         )}
       </div>
 
-      <MessageInput onSend={handleSendMessage} />
+      <MessageInput onSend={handleSendMessage} disabled={sending} /> 
     </div>
   );
 };

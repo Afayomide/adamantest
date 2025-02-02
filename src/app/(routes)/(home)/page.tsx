@@ -34,7 +34,7 @@ const HomePage: FC = () => {
       axios
         .delete(`${API_URL}/conversations/${id}`)
         .then(() => {
-          setConversations((prev:Conversation[]) => prev.filter((conv:any) => conv.id !== id));
+          setConversations((prev:Conversation[]) => prev.filter((conv) => conv.id !== id));
           resolve();
         })
         .catch(reject);
@@ -88,7 +88,6 @@ const HomePage: FC = () => {
           { userEmail: localEmail }
         );
         const newConversation = response.data;
-        console.log("newconversation", newConversation, response.data)
   
         setConversations((prev:Conversation[]) => [...prev, newConversation]);
         router.push(`/conversation/${newConversation.id}`);

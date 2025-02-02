@@ -6,13 +6,13 @@ import MessageList from '../../../../components/messageList';
 import MessageInput from '../../../../components/messageInput';
 import { Button } from '@mui/material';
 import { API_URL } from '../../(home)/page';
-import { Conversation } from '@/components/types';
+import { Conversation, Message, LocalMessage } from '@/components/types';
 import { useConversations } from '@/context/conversationContext';
 
 const ConversationPage: FC = () => {
   const router = useRouter();
   const { id } = useParams();
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false)
   const {setConversations} = useConversations()
@@ -20,8 +20,8 @@ const ConversationPage: FC = () => {
   useEffect(() => {
     if (id) {
       axios
-        .get(`${API_URL}/messages/${id}`)
-        .then((response: any) => {
+        .get<Message[]>(`${API_URL}/messages/${id}`)
+        .then((response) => {
           setMessages(response.data);
           setLoading(false);
           console.log(response.data);
@@ -37,18 +37,19 @@ const ConversationPage: FC = () => {
     if (id) {
       setSending(true)
       try {
-        const response = await axios.post(`${API_URL}/messages/${id}`, { text, isUser: true });
+        const response = await axios.post<Message>(`${API_URL}/messages/${id}`, { text, isUser: true });
         
-        setMessages((prev) => [...prev, response.data]);
+        setMessages((prev:Message[]) => [...prev, response.data]);
   
         setTimeout(async () => {
           const botMessage = {
             text: "This is an AI generated response",
             isUser: false,
             createdAt: new Date().toISOString(),
+            
           };
   
-          setMessages((prev) => [...prev, botMessage]);
+          setMessages((prev:Message[]) => [...prev, botMessage]);
   
           try {
             await axios.post(`${API_URL}/messages/${id}`, botMessage);

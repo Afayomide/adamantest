@@ -5,9 +5,9 @@ import axios from 'axios';
 import MessageList from '../../../../components/messageList';
 import MessageInput from '../../../../components/messageInput';
 import { Button } from '@mui/material';
-import { API_URL } from '../../(home)/page';
 import { Conversation, Message } from '@/components/types';
 import { useConversations } from '@/context/conversationContext';
+import { API_URL } from '@/components/apiurl';
 
 const ConversationPage: FC = () => {
   const router = useRouter();

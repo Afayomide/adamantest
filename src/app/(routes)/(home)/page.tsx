@@ -8,9 +8,7 @@ import { useRouter } from "next/navigation";
 import { LuBadgePlus } from "react-icons/lu";
 import { useConversations } from "@/context/conversationContext";
 import { Conversation } from "@/components/types";
-
-
-export const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { API_URL } from "@/components/apiurl";
 
 const HomePage: FC = () => {
   const {conversations, setConversations} = useConversations();

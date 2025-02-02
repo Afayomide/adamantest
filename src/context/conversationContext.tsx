@@ -2,9 +2,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { API_URL } from "@/app/(routes)/(home)/page";
 import { Conversation } from "@/components/types";
-
+import { API_URL } from "@/components/apiurl";
 
 interface ConversationContextType {
   conversations: Conversation[];

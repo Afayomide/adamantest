@@ -13,15 +13,10 @@ import {
   PopoverPanel,
 } from '@headlessui/react'
 import {
-  ArrowPathIcon,
   Bars3Icon,
-  ChartPieIcon,
-  CursorArrowRaysIcon,
-  FingerPrintIcon,
-  SquaresPlusIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, PhoneIcon, PlayCircleIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon} from '@heroicons/react/20/solid'
 import { IoMdChatboxes } from "react-icons/io";
 import Link from 'next/link'
 import { useConversations } from "@/context/conversationContext";
@@ -33,7 +28,7 @@ import { Conversation } from './types'
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const {conversations, setConversations, loading} = useConversations();
+  const {conversations, loading} = useConversations();
 
   
 
@@ -79,7 +74,7 @@ export default function Header() {
                 <div className="flex w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
                   {/* Display the first character of the userEmail as an avatar */}
                   <span className="text-gray-600 text-lg font-bold">
-                    {conversation.userEmail.charAt(0).toUpperCase()}
+                    {conversation.userEmail?.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <div className="flex-auto">

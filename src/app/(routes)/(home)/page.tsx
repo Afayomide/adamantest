@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { LuBadgePlus } from "react-icons/lu";
 import { useConversations } from "@/context/conversationContext";
+import { Conversation } from "@/components/types";
 
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -33,7 +34,7 @@ const HomePage: FC = () => {
       axios
         .delete(`${API_URL}/conversations/${id}`)
         .then(() => {
-          setConversations((prev:any) => prev.filter((conv:any) => conv.id !== id));
+          setConversations((prev:Conversation[]) => prev.filter((conv:any) => conv.id !== id));
           resolve();
         })
         .catch(reject);
@@ -82,14 +83,14 @@ const HomePage: FC = () => {
   
     const conversationPromise = new Promise<void>(async (resolve, reject) => {
       try {
-        const response = await axios.post<{ id: string }>(
+        const response = await axios.post<Conversation>(
           `${API_URL}/conversations`,
           { userEmail: localEmail }
         );
         const newConversation = response.data;
-        console.log(response.data)
+        console.log("newconversation", newConversation, response.data)
   
-        setConversations((prev:any) => [...prev, newConversation]);
+        setConversations((prev:Conversation[]) => [...prev, newConversation]);
         router.push(`/conversation/${newConversation.id}`);
   
         resolve();

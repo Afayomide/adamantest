@@ -8,10 +8,12 @@ import { Conversation } from "@/components/types";
 
 interface ConversationContextType {
   conversations: Conversation[];
-  setConversations: (conversations: Conversation[]) => void;
+  setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
 }
 
-const ConversationContext = createContext<any | undefined>(undefined);
+const ConversationContext = createContext<ConversationContextType | undefined>(undefined);
 
 export const ConversationProvider = ({ children }: { children: React.ReactNode }) => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -48,7 +50,7 @@ export const ConversationProvider = ({ children }: { children: React.ReactNode }
   }, [localEmail]);
 
   return (
-    <ConversationContext.Provider value={{ conversations, setConversations }}>
+    <ConversationContext.Provider value={{ conversations, setConversations,setLoading, loading }}>
       {children}
     </ConversationContext.Provider>
   );

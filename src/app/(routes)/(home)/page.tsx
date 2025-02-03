@@ -122,6 +122,7 @@ const HomePage: FC = () => {
            value={email}
            onChange={(e) => setEmail(e.target.value)}
            className=" sm:w-full md:w-full lg:w-1/3"
+           type="email"
          />
          <Button variant="contained" color="primary" type="submit">
            Send

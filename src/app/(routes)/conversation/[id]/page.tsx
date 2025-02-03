@@ -8,6 +8,7 @@ import { Button } from '@mui/material';
 import { Conversation, Message } from '@/components/types';
 import { useConversations } from '@/context/conversationContext';
 import { API_URL } from '@/components/apiurl';
+import toast from 'react-hot-toast';
 
 const ConversationPage: FC = () => {
   const router = useRouter();
@@ -77,10 +78,22 @@ const ConversationPage: FC = () => {
 
   const handleDeleteConversation = () => {
     if (id) {
-      axios
-        .delete(`${API_URL}/conversations/${id}`)
-        .then(() => router.push('/'))
-        .catch((error) => console.error(error));
+      const deletePromise = new Promise<void>((resolve, reject) => {
+        axios
+          .delete(`${API_URL}/conversations/${id}`)
+          .then(() => {
+            setConversations((prev:Conversation[]) => prev.filter((conv) => conv.id !== id));
+            resolve();
+            router.push("/")
+          })
+          .catch(reject);
+      });
+
+      toast.promise(deletePromise, {
+        loading: "Deleting conversation...",
+        success: "Conversation deleted successfully",
+        error: "Failed to delete conversation",
+      });
     }
   };
 

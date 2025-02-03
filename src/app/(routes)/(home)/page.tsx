@@ -11,7 +11,7 @@ import { Conversation } from "@/components/types";
 import { API_URL } from "@/components/apiurl";
 
 const HomePage: FC = () => {
-  const {conversations, setConversations} = useConversations();
+  const {conversations, setConversations, user, setUser} = useConversations();
   const [email, setEmail] = useState<string>("");
   const [localEmail, setLocalEmail] = useState<string | null>(null);
   const router = useRouter()
@@ -60,6 +60,7 @@ const HomePage: FC = () => {
         setLocalEmail(email);
   
         resolve();
+        setUser(true)
       } catch (error) {
         console.error("Error creating user:", error);
         reject(error);
@@ -67,8 +68,8 @@ const HomePage: FC = () => {
     });
   
     toast.promise(registerPromise, {
-      loading: "Registering user...",
-      success: "User created successfully",
+      loading: "Getting you in...",
+      success: "Welcome",
       error: "Failed to create user",
     });
   };
@@ -106,7 +107,7 @@ const HomePage: FC = () => {
   
   return (
     <div className="flex flex-col justify-center p-4">
-      {!localEmail ? (
+      {!user ? (
        <form
        onSubmit={(e) => {
          e.preventDefault();

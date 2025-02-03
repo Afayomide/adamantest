@@ -10,6 +10,8 @@ interface ConversationContextType {
   setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>
   loading: boolean;
   setLoading: (loading: boolean) => void;
+  user: boolean;
+  setUser: (user:boolean) => void;
 }
 
 const ConversationContext = createContext<ConversationContextType | undefined>(undefined);
@@ -17,14 +19,19 @@ const ConversationContext = createContext<ConversationContextType | undefined>(u
 export const ConversationProvider = ({ children }: { children: React.ReactNode }) => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState<boolean>(true)
+  const [user, setUser] = useState<boolean>(false)
   let localEmail: string | null = null;
   if (typeof window !== "undefined") {
     localEmail = localStorage.getItem("email");
+   
   }
 
-  useEffect(() => {
+  useEffect(() => { 
+   
     if (!localEmail) return;
-
+ if (localEmail){
+      setUser(true)
+    }
     const fetchConversations = async () => {
       const conversationPromise = new Promise<void>(async (resolve, reject) => {
         try {
@@ -52,7 +59,7 @@ export const ConversationProvider = ({ children }: { children: React.ReactNode }
   }, [localEmail]);
 
   return (
-    <ConversationContext.Provider value={{ conversations, setConversations,setLoading, loading }}>
+    <ConversationContext.Provider value={{ conversations, setConversations,setLoading, loading, user, setUser }}>
       {children}
     </ConversationContext.Provider>
   );

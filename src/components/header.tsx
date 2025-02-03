@@ -21,6 +21,9 @@ import { IoMdChatboxes } from "react-icons/io";
 import Link from 'next/link'
 import { useConversations } from "@/context/conversationContext";
 import { Conversation } from './types'
+import { IoExitOutline } from "react-icons/io5";
+import { useRouter } from 'next/navigation'
+
 
 
 
@@ -28,8 +31,17 @@ import { Conversation } from './types'
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const {conversations, loading} = useConversations();
+  const {conversations, loading, setUser, user} = useConversations();
+  const router = useRouter()
 
+  function leaveApp(){
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("email");
+      setUser(false)
+
+    }
+    router.push ("/")
+  }
   
 
 
@@ -97,8 +109,10 @@ export default function Header() {
          
         </PopoverGroup>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm/6 font-semibold text-gray-900">
-          </a>
+          {user ?  <p onClick={leaveApp} className="flex items-center justify-center text-sm font-semibold text-gray-900 cursor-pointer hover:text-gray-700">
+         <IoExitOutline/> exit
+          </p>: <></>}
+        
         </div>
       </nav>
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
@@ -148,7 +162,9 @@ export default function Header() {
                
               </div>
               <div className="py-6">
-              
+              {user ?  <p onClick={leaveApp} className="flex items-center justify-center text-sm font-semibold text-gray-900 cursor-pointer hover:text-gray-700">
+         <IoExitOutline/> exit
+          </p>: <></>}
               </div>
             </div>
           </div>
